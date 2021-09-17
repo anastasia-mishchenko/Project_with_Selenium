@@ -173,37 +173,6 @@ public class YellowTailSite {
 
 
         }
-    @Test (description = "Case8")
-//Case 8: Where to buy: enter valid postal code
-//1. Navigate to “Where to buy” page
-//2. Enter valid data in “Your location” field
-//3. Click on Search button
-//4. Verify that the results of search are displayed
-
-    public void enterValidPostalCode() throws InterruptedException {
-            Thread.sleep(2000);
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        checkboxLegalDrinkingAge.click();
-        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
-        dropdownSelect.selectByValue("eu");
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        welcomeButton.click();
-
-            Thread.sleep(2000);
-        WebElement menuButton = driver.findElement(By.xpath("//span[text()='Menu']"));
-        menuButton.click();
-            Thread.sleep(2000);
-        WebElement whereToBuyNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Where To Buy']"));
-        whereToBuyNavigation.click();
-            Thread.sleep(2000);
-        WebElement locationNameField = driver.findElement(By.xpath("//input[@id='locationName']"));
-        locationNameField.click();
-        locationNameField.sendKeys("Sydney");
-        WebElement searchSubmitButton = driver.findElement(By.xpath("//button[@class='search-submit']"));
-        searchSubmitButton.click();
-        WebElement stocksInEnteredArea = driver.findElement(By.xpath("//h3[@style='display: block;']"));
-        Assert.assertTrue(stocksInEnteredArea.isDisplayed(), "Passed");
-    }
 
         @Test (description = "Case6")
 //        Case 6: Main page: Global Nav logic
@@ -235,6 +204,40 @@ public class YellowTailSite {
 
     }
     //Case 7 страница с китайским недоступна
+
+    @Test (description = "Case8")
+//Case 8: Where to buy: enter valid postal code
+//1. Navigate to “Where to buy” page
+//2. Enter valid data in “Your location” field
+//3. Click on Search button
+//4. Verify that the results of search are displayed
+
+    public void enterValidPostalCode() throws InterruptedException {
+        Thread.sleep(2000);
+        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
+        checkboxLegalDrinkingAge.click();
+        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
+        dropdownSelect.selectByValue("eu");
+        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
+        welcomeButton.click();
+
+        Thread.sleep(2000);
+        WebElement menuButton = driver.findElement(By.xpath("//span[text()='Menu']"));
+        menuButton.click();
+        Thread.sleep(2000);
+        WebElement whereToBuyNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Where To Buy']"));
+        whereToBuyNavigation.click();
+        Thread.sleep(2000);
+        WebElement locationNameField = driver.findElement(By.xpath("//input[@id='locationName']"));
+        locationNameField.click();
+        locationNameField.sendKeys("Sydney");
+        WebElement searchSubmitButton = driver.findElement(By.xpath("//button[@class='search-submit']"));
+        searchSubmitButton.click();
+        WebElement stocksInEnteredArea = driver.findElement(By.xpath("//h3[@style='display: block;']"));
+        Assert.assertTrue(stocksInEnteredArea.isDisplayed(), "Passed");
+    }
+
+
     @Test (description = "Case9")
 //Case 9: Cocktails: Select one wine
 //1. Navigate to “Cocktails” page
