@@ -1,8 +1,7 @@
 package YellowTail;
 
-import org.openqa.selenium.By;
+import YellowTail.Pages.*;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
@@ -10,9 +9,8 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class YellowTailSite {
     WebDriver driver;
@@ -38,17 +36,17 @@ public class YellowTailSite {
 //3. Verify that checkbox before “I am of legal drinking age in” is displayed
 //4. Verify that dropdown with Select is displayed
 //5. Verify that “Welcome” button is displayed and is inactive
-    public void isElementDisplayedWelcomePage() throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement legalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        Assert.assertTrue(legalDrinkingAge.isDisplayed(),"Passed");
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        Assert.assertTrue(checkboxLegalDrinkingAge.isDisplayed(),"Passed");
-        WebElement dropdownSelect = driver.findElement(By.xpath("//select[@name='country']"));
-        Assert.assertTrue(dropdownSelect.isDisplayed(),"Passed");
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        Assert.assertTrue(welcomeButton.isDisplayed(),"Passed");
-        Assert.assertFalse(welcomeButton.isEnabled(),"Passed");
+    public void isElementDisplayedWelcomePage() {
+
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+
+        WelcomePage welcomePage = new WelcomePage(driver);
+
+        Assert.assertTrue(welcomePage.getLegalDrinkingAgeField().isDisplayed());
+        Assert.assertTrue(welcomePage.getCheckboxLegalDrinkingAge().isDisplayed());
+        Assert.assertTrue(welcomePage.getSelectedDropdown().isDisplayed());
+        Assert.assertTrue(welcomePage.getWelcomeButton().isDisplayed());
+        Assert.assertFalse(welcomePage.getWelcomeButton().isEnabled());
 
     }
     @Test (description = "Case2")
@@ -57,21 +55,19 @@ public class YellowTailSite {
 //2. Select “Europe” from dropbox
 //3. Press “Welcome” button
 //4. Main page should be displayed
-    public void navigateToMainPage () throws InterruptedException {
+    public void navigateToMainPage (){
 
-        Thread.sleep(2000);
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        checkboxLegalDrinkingAge.click();
+        driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
+        WelcomePage welcomePage = new WelcomePage(driver);
+        MainPage mainPage = new MainPage(driver);
 
-        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
+        welcomePage.getCheckboxLegalDrinkingAge().click();
+
+        Select dropdownSelect = new Select(welcomePage.getDropdownSelect());
         dropdownSelect.selectByValue("eu");
 
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        Assert.assertTrue(welcomeButton.isEnabled(),"Passed");
-        welcomeButton.click();
-
-        WebElement welcomeLogo = driver.findElement(By.xpath("//span[text()='Welcome']"));
-        Assert.assertTrue(welcomeLogo.isDisplayed(),"Passed");
+        welcomePage.clickOnWelcomeButton();
+        Assert.assertTrue(mainPage.getWelcomeLogo().isDisplayed());
 
     }
     @Test (description = "Case3")
@@ -83,29 +79,22 @@ public class YellowTailSite {
 //- We are passionate about creating great tasting, quality wines for everyone to enjoy
 //- find your wine button
 //- footer
-    public void isElementsDisplayedMainPage () throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        checkboxLegalDrinkingAge.click();
-        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
+    public void isElementsDisplayedMainPage (){
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        WelcomePage welcomePage = new WelcomePage(driver);
+
+        welcomePage.getCheckboxLegalDrinkingAge().click();
+
+        Select dropdownSelect = new Select(welcomePage.getDropdownSelect());
         dropdownSelect.selectByValue("eu");
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        welcomeButton.click();
 
-        WebElement menuButton = driver.findElement(By.xpath("//span[text()='Menu']"));
-        Assert.assertTrue(menuButton.isDisplayed(),"Passed");
+        MainPage mainPage = welcomePage.clickOnWelcomeButton();
 
-        WebElement welcomeToTheWorld = driver.findElement(By.xpath("//div[@class='content animation-screen -one']/h2"));
-        Assert.assertTrue(welcomeToTheWorld.isDisplayed(),"Passed");
-
-        WebElement weArePassionate = driver.findElement(By.xpath("//p[contains(text(),'We are passionate')]"));
-        Assert.assertTrue(weArePassionate.isDisplayed(),"Passed");
-
-        WebElement findYourWineButton = driver.findElement(By.xpath("//div[@class='content animation-screen -one']/a"));
-        Assert.assertTrue(findYourWineButton.isDisplayed(),"Passed");
-
-        WebElement footer = driver.findElement(By.xpath("//footer"));
-        Assert.assertTrue(footer.isDisplayed(),"Passed");
+        Assert.assertTrue(mainPage.getMenuButton().isDisplayed());
+        Assert.assertTrue(mainPage.getWelcomeToTheWorldLogo().isDisplayed());
+        Assert.assertTrue(mainPage.getWeArePassionateParagraph().isDisplayed());
+        Assert.assertTrue(mainPage.getFindYourWineButton().isDisplayed());
+        Assert.assertTrue(mainPage.getFooter().isDisplayed());
 
     }
     @Test (description = "Case4")
@@ -113,36 +102,27 @@ public class YellowTailSite {
 //1. Navigate to main page
 //2. Click on Menu button
 //3. Verify that header with all needed links is appeared
-    public void openHeader() throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        checkboxLegalDrinkingAge.click();
-        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
+    public void openHeader(){
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        WelcomePage welcomePage = new WelcomePage(driver);
+
+        welcomePage.getCheckboxLegalDrinkingAge().click();
+
+        Select dropdownSelect = new Select(welcomePage.getDropdownSelect());
         dropdownSelect.selectByValue("eu");
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        welcomeButton.click();
 
-        Thread.sleep(2000);
-        WebElement menuButton = driver.findElement(By.xpath("//span[text()='Menu']"));
-        menuButton.click();
+        MainPage mainPage = welcomePage.clickOnWelcomeButton();
+        MenuBar menuBar = mainPage.clickOnMenuButton();
 
-        Thread.sleep(2000);
-        WebElement yellowTailLogo = driver.findElement(By.xpath("//div[@class='top-nav -active']//img[@alt='Yellow tail logo']"));
-        Assert.assertTrue(yellowTailLogo.isDisplayed(),"Passed");
-        WebElement winesNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Wines']"));
-        Assert.assertTrue(winesNavigation.isDisplayed(),"Passed");
-        WebElement whereToBuyNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Where To Buy']"));
-        Assert.assertTrue(whereToBuyNavigation.isDisplayed(),"Passed");
-        WebElement cocktailsNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Cocktails']"));
-        Assert.assertTrue(cocktailsNavigation.isDisplayed(),"Passed");
-        WebElement ourStoryNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Our Story']"));
-        Assert.assertTrue(ourStoryNavigation.isDisplayed(),"Passed");
-        WebElement fAQsNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='FAQs']"));
-        Assert.assertTrue(fAQsNavigation.isDisplayed(),"Passed");
-        WebElement contactNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Contact']"));
-        Assert.assertTrue(contactNavigation.isDisplayed(),"Passed");
-        WebElement globeDropdown = driver.findElement(By.xpath("//div[@class='main-nav']//span[@class='fa fa-globe fa-lg']"));
-        Assert.assertTrue(globeDropdown.isDisplayed(),"Passed");
+        menuBar.waitForYellowTailLogo();
+        Assert.assertTrue(menuBar.getYellowTailLogo().isDisplayed());
+        Assert.assertTrue(menuBar.getWhereToBuyNavigation().isDisplayed());
+        Assert.assertTrue(menuBar.getWinesNavigation().isDisplayed());
+        Assert.assertTrue(menuBar.getCocktailsNavigation().isDisplayed());
+        Assert.assertTrue(menuBar.getOurStoryNavigation().isDisplayed());
+        Assert.assertTrue(menuBar.getFAQsNavigation().isDisplayed());
+        Assert.assertTrue(menuBar.getContactNavigation().isDisplayed());
+        Assert.assertTrue(menuBar.getGlobeDropdown().isDisplayed());
 
     }
 
@@ -152,24 +132,21 @@ public class YellowTailSite {
 //2. Click on Menu button
 //3. Click on [yellow tail]
 //4. Verify that Menu button is visible
-    public void closeHeader() throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        checkboxLegalDrinkingAge.click();
-        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
+    public void closeHeader(){
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+
+        WelcomePage welcomePage = new WelcomePage(driver);
+
+        welcomePage.getCheckboxLegalDrinkingAge().click();
+
+        Select dropdownSelect = new Select(welcomePage.getDropdownSelect());
         dropdownSelect.selectByValue("eu");
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        welcomeButton.click();
 
-        Thread.sleep(2000);
-        WebElement menuButton = driver.findElement(By.xpath("//span[text()='Menu']"));
-        menuButton.click();
-        Thread.sleep(2000);
-        WebElement yellowTailLogo = driver.findElement(By.xpath("//div[@class='top-nav -active']//img[@alt='Yellow tail logo']"));
-        yellowTailLogo.click();
-
-        Thread.sleep(2000);
-        Assert.assertTrue(menuButton.isDisplayed(),"Passed");
+        MainPage mainPage = welcomePage.clickOnWelcomeButton();
+        MenuBar menuBar = mainPage.clickOnMenuButton();
+        menuBar.waitForYellowTailLogo();
+        menuBar.getYellowTailLogo().click();
+        Assert.assertTrue(mainPage.getMenuButton().isDisplayed());
 
 
         }
@@ -181,24 +158,21 @@ public class YellowTailSite {
 //        3. Click on Globe icon
 //        4. Select China in popup and click on it
 //        5. Verify that language is changed
-        public void verifyIsLanguageChanged() throws InterruptedException {
-            Thread.sleep(2000);
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        checkboxLegalDrinkingAge.click();
-        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
-        dropdownSelect.selectByValue("eu");
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        welcomeButton.click();
+        public void verifyIsLanguageChanged() {
+            driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 
-            Thread.sleep(2000);
-        WebElement menuButton = driver.findElement(By.xpath("//span[text()='Menu']"));
-        menuButton.click();
-            Thread.sleep(2000);
-        WebElement globeDropdown = driver.findElement(By.xpath("//div[@class='main-nav']//span[@class='fa fa-globe fa-lg']"));
-        globeDropdown.click();
+            WelcomePage welcomePage = new WelcomePage(driver);
 
-        WebElement chinaSelect = driver.findElement(By.xpath("//a[@data-key='CN']"));
-        chinaSelect.click();
+            welcomePage.getCheckboxLegalDrinkingAge().click();
+
+            Select dropdownSelect = new Select(welcomePage.getDropdownSelect());
+            dropdownSelect.selectByValue("eu");
+
+            MainPage mainPage = welcomePage.clickOnWelcomeButton();
+            MenuBar menuBar = mainPage.clickOnMenuButton();
+            menuBar.waitForYellowTailLogo();
+            menuBar.getGlobeDropdown().click();
+            menuBar.getChinaLanguageSelect().click();
 
         Assert.assertTrue(driver.getCurrentUrl().contains("cn"));
 
@@ -212,29 +186,24 @@ public class YellowTailSite {
 //3. Click on Search button
 //4. Verify that the results of search are displayed
 
-    public void enterValidPostalCode() throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        checkboxLegalDrinkingAge.click();
-        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
-        dropdownSelect.selectByValue("eu");
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        welcomeButton.click();
+    public void enterValidPostalCode() {
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 
-        Thread.sleep(2000);
-        WebElement menuButton = driver.findElement(By.xpath("//span[text()='Menu']"));
-        menuButton.click();
-        Thread.sleep(2000);
-        WebElement whereToBuyNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Where To Buy']"));
-        whereToBuyNavigation.click();
-        Thread.sleep(2000);
-        WebElement locationNameField = driver.findElement(By.xpath("//input[@id='locationName']"));
-        locationNameField.click();
-        locationNameField.sendKeys("Sydney");
-        WebElement searchSubmitButton = driver.findElement(By.xpath("//button[@class='search-submit']"));
-        searchSubmitButton.click();
-        WebElement stocksInEnteredArea = driver.findElement(By.xpath("//h3[@style='display: block;']"));
-        Assert.assertTrue(stocksInEnteredArea.isDisplayed(), "Passed");
+        WelcomePage welcomePage = new WelcomePage(driver);
+
+        welcomePage.getCheckboxLegalDrinkingAge().click();
+
+        Select dropdownSelect = new Select(welcomePage.getDropdownSelect());
+        dropdownSelect.selectByValue("eu");
+
+        MainPage mainPage = welcomePage.clickOnWelcomeButton();
+        MenuBar menuBar = mainPage.clickOnMenuButton();
+        WhereToBuyPage whereToBuyPage = menuBar.clickOnWhereToBuyNavigation();
+        whereToBuyPage.getLocationNameField().click();
+        whereToBuyPage.getLocationNameField().sendKeys("Sydney");
+        whereToBuyPage.getSearchSubmitButton().click();
+
+        Assert.assertTrue(whereToBuyPage.getStockInEnteredArea().isDisplayed());
     }
 
 
@@ -243,30 +212,23 @@ public class YellowTailSite {
 //1. Navigate to “Cocktails” page
 //2. Select “Red wine cocktails”
 //3. Verify that 9 recipes are displayed
-    public void verifyRecipesAreDisplayed () throws InterruptedException {
-            Thread.sleep(2000);
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        checkboxLegalDrinkingAge.click();
-        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
-        dropdownSelect.selectByValue("eu");
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        welcomeButton.click();
+    public void verifyRecipesAreDisplayed () {
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 
-            Thread.sleep(2000);
-        WebElement menuButton = driver.findElement(By.xpath("//span[text()='Menu']"));
-        menuButton.click();
-            Thread.sleep(2000);
-        WebElement cocktailsNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Cocktails']"));
-        cocktailsNavigation.click();
-            Thread.sleep(2000);
-        WebElement selectWineForCocktails = driver.findElement(By.xpath("//a[@class='selected']"));
-        selectWineForCocktails.click();
-            Thread.sleep(2000);
-        WebElement redWine = driver.findElement(By.xpath("//a[@data-value='red']"));
-        redWine.click();
-            Thread.sleep(2000);
-        List<WebElement> redWineRecipes = driver.findElements(By.xpath("//div[@class='tile recipe-tile']"));
-        Assert.assertTrue(redWineRecipes.size()==9);
+        WelcomePage welcomePage = new WelcomePage(driver);
+
+        welcomePage.getCheckboxLegalDrinkingAge().click();
+
+        Select dropdownSelect = new Select(welcomePage.getDropdownSelect());
+        dropdownSelect.selectByValue("eu");
+
+        MainPage mainPage = welcomePage.clickOnWelcomeButton();
+        MenuBar menuBar = mainPage.clickOnMenuButton();
+        CocktailsPage cocktailsPage = menuBar.clickOnCocktailsNavigation();
+        cocktailsPage.getSelectWineForCocktails().click();
+        cocktailsPage.getRedWineElement().click();
+        Assert.assertEquals(cocktailsPage.getRedWineRecipes().size(), 9);
+
     }
 
     @Test (description = "Case10")
@@ -276,33 +238,27 @@ public class YellowTailSite {
 //3. Click on “RASPBERRY ROSÉ” recipe
 //4. Verify that new page is displayed:
 //   - ingredients section is displayed
-    public void verifyRaspberryRosePageIsDisplayed () throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        checkboxLegalDrinkingAge.click();
-        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
+    public void verifyRaspberryRosePageIsDisplayed () {
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+        WelcomePage welcomePage = new WelcomePage(driver);
+
+        welcomePage.getCheckboxLegalDrinkingAge().click();
+
+        Select dropdownSelect = new Select(welcomePage.getDropdownSelect());
         dropdownSelect.selectByValue("eu");
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        welcomeButton.click();
 
-        Thread.sleep(2000);
-        WebElement menuButton = driver.findElement(By.xpath("//span[text()='Menu']"));
-        menuButton.click();
-        Thread.sleep(2000);
-        WebElement cocktailsNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Cocktails']"));
-        cocktailsNavigation.click();
-        Thread.sleep(2000);
-
-        WebElement recipeRaspberryRose = driver.findElement(By.xpath("//h2[contains(text(),'Raspberry Rosé')]"));
+        MainPage mainPage = welcomePage.clickOnWelcomeButton();
+        MenuBar menuBar = mainPage.clickOnMenuButton();
+        CocktailsPage cocktailsPage = menuBar.clickOnCocktailsNavigation();
         Actions actions = new Actions(driver);
-        actions.moveToElement(recipeRaspberryRose);
+        actions.moveToElement(cocktailsPage.getRaspberryRoseRecipe());
         actions.perform();
-        recipeRaspberryRose.click();
+        cocktailsPage.getRaspberryRoseRecipe().click();
+        Assert.assertTrue(cocktailsPage.getRecipeTitle().isDisplayed());
+        Assert.assertTrue(cocktailsPage.getIngredientsSection().isDisplayed());
 
-        WebElement recipeTitle = driver.findElement(By.xpath("//h1[@class='recipe-title']"));
-        Assert.assertTrue(recipeTitle.isDisplayed(),"Passed");
-        WebElement ingredients = driver.findElement(By.xpath("//h3[contains(text(),'Ingredients')]"));
-        Assert.assertTrue(ingredients.isDisplayed(),"Passed");
+
 
     }
     @Test (description = "Case11")
@@ -312,38 +268,26 @@ public class YellowTailSite {
 //3. Select “Sparkling wine cocktails”
 //4. Verify that “Multiple” word is displayed in “Type” dropdown
 //5. Verify that 18 recipes are displayed
-    public void testSelectSeverWines () throws InterruptedException {
-        Thread.sleep(2000);
-        WebElement checkboxLegalDrinkingAge = driver.findElement(By.xpath("//label[@for='confirm']"));
-        checkboxLegalDrinkingAge.click();
-        Select dropdownSelect = new Select(driver.findElement(By.xpath("//select[@name='country']")));
+    public void testSelectSeverWines (){
+
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+
+        WelcomePage welcomePage = new WelcomePage(driver);
+
+        welcomePage.getCheckboxLegalDrinkingAge().click();
+
+        Select dropdownSelect = new Select(welcomePage.getDropdownSelect());
         dropdownSelect.selectByValue("eu");
-        WebElement welcomeButton = driver.findElement(By.xpath("//input[@type='submit']"));
-        welcomeButton.click();
 
-        Thread.sleep(2000);
-        WebElement menuButton = driver.findElement(By.xpath("//span[text()='Menu']"));
-        menuButton.click();
-        Thread.sleep(2000);
-        WebElement cocktailsNavigation = driver.findElement(By.xpath("//div[@class='main-nav']//span[text()='Cocktails']"));
-        cocktailsNavigation.click();
-        Thread.sleep(2000);
-
-        WebElement selectWineForCocktails = driver.findElement(By.xpath("//a[@class='selected']"));
-        selectWineForCocktails.click();
-        Thread.sleep(2000);
-        WebElement redWine = driver.findElement(By.xpath("//a[@data-value='red']"));
-        redWine.click();
-        WebElement sparklingWine = driver.findElement(By.xpath("//a[@data-value='bubbles']"));
-        sparklingWine.click();
-
-        WebElement multipleSelect = driver.findElement(By.xpath("//span[contains(text(),'Multiple')]"));
-        Assert.assertTrue(multipleSelect.isDisplayed(),"Passed");
-        List<WebElement> redWineRecipes = driver.findElements(By.xpath("//div[@class='tile recipe-tile']"));
-        Assert.assertTrue(redWineRecipes.size()==20);
-
-
-
+        MainPage mainPage = welcomePage.clickOnWelcomeButton();
+        MenuBar menuBar = mainPage.clickOnMenuButton();
+        CocktailsPage cocktailsPage = menuBar.clickOnCocktailsNavigation();
+        cocktailsPage.getCocktailsNavigation().click();
+        cocktailsPage.getSelectWineForCocktails().click();
+        cocktailsPage.getRedWineElement().click();
+        cocktailsPage.getSparklingWine().click();
+        Assert.assertTrue(cocktailsPage.getMultipleSelect().isDisplayed());
+        Assert.assertEquals(cocktailsPage.getRedWineRecipes().size(), 20);
 
     }
 
