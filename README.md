@@ -46,25 +46,25 @@ Case 6: Main page: Global Nav logic
 4. Select China in popup and click on it
 5. Verify that language is changed
 
-Case 8: Where to buy: enter valid postal code
+Case 7: Where to buy: enter valid postal code
 1. Navigate to “Where to buy” page
 2. Enter valid data in “Your location” field
 3. Click on Search button
 4. Verify that the results of search are displayed
 
-Case 9: Cocktails: Select one wine
+Case 8: Cocktails: Select one wine
 1. Navigate to “Cocktails” page
 2. Select “Red wine cocktails”
 3. Verify that 9 recipes are displayed
    
-Case 10: Cocktails: Navigate to Cocktail recipe page
+Case 9: Cocktails: Navigate to Cocktail recipe page
 1. Navigate to “Cocktails” page
 2. Scroll to “RASPBERRY ROSÉ” recipe
 3. Click on “RASPBERRY ROSÉ” recipe
 4. Verify that new page is displayed:
     - ingredients section is displayed
 
-Case 11: Cocktails: Select several wines
+Case 10: Cocktails: Select several wines
 1. Navigate to “Cocktails” page
 2. Select “Red wine cocktails”
 3. Select “Sparkling wine cocktails”
