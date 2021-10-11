@@ -1,5 +1,7 @@
 package yellowTail.pages;
 
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import yellowTail.DriverProvider;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,54 +13,54 @@ import java.util.List;
 public class CocktailsPage {
     WebDriver driver;
     @FindBy (xpath = "//div[@class='main-nav']//span[text()='Cocktails']")
-    private WebElement cocktailsNavigation;
+    private SelenideElement cocktailsNavigation;
     @FindBy (xpath = "//a[@class='selected']")
-    private WebElement selectWineForCocktails;
+    private SelenideElement selectWineForCocktails;
     @FindBy (xpath = "//a[@data-value='red']")
-    private WebElement redWineElement;
+    private SelenideElement redWineElement;
     @FindBy (xpath = "//div[@class='tile recipe-tile']")
-    private List<WebElement> redWineRecipes;
+    private ElementsCollection redWineRecipes;
     @FindBy (xpath = "//h2[contains(text(),'Raspberry Rosé')]")
-    private WebElement raspberryRoseRecipe;
+    private SelenideElement raspberryRoseRecipe;
     @FindBy (xpath = "//h1[@class='recipe-title']")
-    private WebElement recipeTitle;
+    private SelenideElement recipeTitle;
     @FindBy (xpath = "//h3[contains(text(),'Ingredients')]")
-    private WebElement ingredientsSection;
+    private SelenideElement ingredientsSection;
     @FindBy (xpath = "//a[@data-value='bubbles']")
-    private WebElement sparklingWine;
+    private SelenideElement sparklingWine;
     @FindBy (xpath = "//span[contains(text(),'Multiple')]")
-    private WebElement multipleSelect;
+    private SelenideElement multipleSelect;
 
 
-    public CocktailsPage () {
-        this.driver = DriverProvider.INSTANCE.getDriver();
-        PageFactory.initElements(driver,this);
-    }
-    public WebElement getCocktailsNavigation(){
+//    public CocktailsPage () {
+//        this.driver = DriverProvider.INSTANCE.getDriver();
+//        PageFactory.initElements(driver,this);
+//    }
+    public SelenideElement getCocktailsNavigation(){
         return cocktailsNavigation;
     }
-    public WebElement getSelectWineForCocktails(){
+    public SelenideElement getSelectWineForCocktails(){
         return selectWineForCocktails;
     }
-    public WebElement getRedWineElement(){
+    public SelenideElement getRedWineElement(){
         return redWineElement;
     }
-    public List<WebElement> getRedWineRecipes(){
+    public ElementsCollection getRedWineRecipes(){
         return redWineRecipes;
     }
-    public WebElement getRaspberryRoseRecipe(){
+    public SelenideElement getRaspberryRoseRecipe(){
         return raspberryRoseRecipe;
     }
-    public WebElement getRecipeTitle(){
+    public SelenideElement getRecipeTitle(){
         return recipeTitle;
     }
-    public WebElement getIngredientsSection(){
+    public SelenideElement getIngredientsSection(){
         return ingredientsSection;
     }
-    public WebElement getSparklingWine(){
+    public SelenideElement getSparklingWine(){
         return sparklingWine;
     }
-    public WebElement getMultipleSelect(){
+    public SelenideElement getMultipleSelect(){
         return multipleSelect;
     }
 

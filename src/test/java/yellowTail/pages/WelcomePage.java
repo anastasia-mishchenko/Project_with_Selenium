@@ -1,6 +1,7 @@
 package yellowTail.pages;
 
-import io.qameta.allure.Step;
+
+import com.codeborne.selenide.SelenideElement;
 import yellowTail.DriverProvider;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,58 +9,50 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
+import static com.codeborne.selenide.Selenide.page;
+
 public class WelcomePage {
    WebDriver driver;
    @FindBy (xpath = "//label[@for='confirm']")
-   private WebElement legalDrinkingAgeField;
+   private SelenideElement legalDrinkingAgeField;
     @FindBy (xpath = "//label[@for='confirm']")
-    private WebElement checkboxLegalDrinkingAge;
+    private SelenideElement checkboxLegalDrinkingAge;
     @FindBy (xpath = "//select[@name='country']")
-    private WebElement selectedDropdown;
+    private SelenideElement selectedDropdown;
     @FindBy (xpath = "//input[@type='submit']")
-    private WebElement welcomeButton;
+    private SelenideElement welcomeButton;
     @FindBy (xpath = "//select[@name='country']")
-    private WebElement dropdownSelect;
+    private SelenideElement dropdownSelect;
 
-   public WelcomePage(){
-       this.driver = DriverProvider.INSTANCE.getDriver();
-       PageFactory.initElements(driver,this);
-   }
-    @Step
-    public WebElement getLegalDrinkingAgeField() {
+//   public WelcomePage() {
+//       this.driver = DriverProvider.INSTANCE.getDriver();
+//       PageFactory.initElements(driver, this);
+//   }
+    public SelenideElement getLegalDrinkingAgeField() {
        return legalDrinkingAgeField;
     }
-    @Step
-    public WebElement getCheckboxLegalDrinkingAge() {
+    public SelenideElement getCheckboxLegalDrinkingAge() {
         return checkboxLegalDrinkingAge;
     }
-    @Step
-    public WebElement getSelectedDropdown() {
+    public SelenideElement getSelectedDropdown() {
      return selectedDropdown;
     }
-    @Step
-    public WebElement getWelcomeButton() {
+    public SelenideElement getWelcomeButton() {
        return welcomeButton;
     }
-    @Step
-    public WebElement getDropdownSelect() {
+    public SelenideElement getDropdownSelect() {
         return dropdownSelect;
     }
-    @Step
     public MainPage clickOnWelcomeButton(){
        getWelcomeButton().click();
-       return new MainPage();
+       return page (MainPage.class);
     }
-    @Step ("Navigate to Main page")
     public MainPage navigateToMainPage(){
 
        getCheckboxLegalDrinkingAge().click();
-
-        Select dropdownSelect = new Select(getDropdownSelect());
-        dropdownSelect.selectByValue("eu");
-
+        getDropdownSelect().selectOptionByValue("eu");
         welcomeButton.click();
-        return new MainPage();
+        return page(MainPage.class);
     }
 
 }

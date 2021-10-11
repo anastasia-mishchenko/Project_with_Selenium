@@ -1,84 +1,77 @@
 package yellowTail.pages;
 
-import io.qameta.allure.Step;
+import com.codeborne.selenide.SelenideElement;
 import yellowTail.DriverProvider;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static com.codeborne.selenide.Selenide.page;
+
 public class MenuBar {
     WebDriver driver;
     @FindBy(xpath = "//div[@class='top-nav -active']//img[@alt='Yellow tail logo']")
-    private WebElement yellowTailLogo;
+    private SelenideElement yellowTailLogo;
     @FindBy(xpath = "//div[@class='main-nav']//span[text()='Wines']")
-    private WebElement winesNavigation;
+    private SelenideElement winesNavigation;
     @FindBy(xpath = "//div[@class='main-nav']//span[text()='Where To Buy']")
-    private WebElement whereToBuyNavigation;
+    private SelenideElement whereToBuyNavigation;
     @FindBy(xpath = "//div[@class='main-nav']//span[text()='Cocktails']")
-    private WebElement cocktailsNavigation;
+    private SelenideElement cocktailsNavigation;
     @FindBy(xpath = "//div[@class='main-nav']//span[text()='Our Story']")
-    private WebElement ourStoryNavigation;
+    private SelenideElement ourStoryNavigation;
     @FindBy(xpath = "//div[@class='main-nav']//span[text()='FAQs']")
-    private WebElement fAQsNavigation;
+    private SelenideElement fAQsNavigation;
     @FindBy(xpath = "//div[@class='main-nav']//span[text()='Contact']")
-    private WebElement contactNavigation;
+    private SelenideElement contactNavigation;
     @FindBy(xpath = "//div[@class='main-nav']//span[@class='fa fa-globe fa-lg']")
-    private WebElement globeDropdown;
+    private SelenideElement globeDropdown;
     @FindBy(xpath = "//a[@data-key='CN']")
-    private WebElement chinaLanguageSelect;
+    private SelenideElement chinaLanguageSelect;
 
 
 
-    public MenuBar() {
-        this.driver = DriverProvider.INSTANCE.getDriver();
-        PageFactory.initElements(driver,this);
-    }
-    @Step
-    public WebElement getYellowTailLogo () {
+//    public MenuBar() {
+//        this.driver = DriverProvider.INSTANCE.getDriver();
+//        PageFactory.initElements(driver,this);
+//    }
+
+    public SelenideElement getYellowTailLogo () {
         return yellowTailLogo;
     }
-    @Step
-    public WebElement getWinesNavigation () {
+    public SelenideElement getWinesNavigation () {
         return winesNavigation;
     }
-    @Step
-    public WebElement getWhereToBuyNavigation() {
+    public SelenideElement getWhereToBuyNavigation() {
       return whereToBuyNavigation;
    }
-    @Step
-    public WebElement getCocktailsNavigation() {
+    public SelenideElement getCocktailsNavigation() {
         return cocktailsNavigation;
     }
-    @Step
-    public WebElement getOurStoryNavigation() {
+    public SelenideElement getOurStoryNavigation() {
         return ourStoryNavigation;
     }
-    @Step
-    public WebElement getFAQsNavigation() {
+    public SelenideElement getFAQsNavigation() {
         return fAQsNavigation;
     }
-    @Step
-    public WebElement getContactNavigation() {
+    public SelenideElement getContactNavigation() {
         return contactNavigation;
     }
-    @Step
-    public WebElement getGlobeDropdown() {
+    public SelenideElement getGlobeDropdown() {
         return globeDropdown;
     }
-    @Step
-    public WebElement getChinaLanguageSelect() {
+    public SelenideElement getChinaLanguageSelect() {
         return chinaLanguageSelect;
     }
-    @Step ("Navigate to WhereToBuy page")
+
     public WhereToBuyPage clickOnWhereToBuyNavigation(){
         getWhereToBuyNavigation().click();
-        return new WhereToBuyPage();
+        return page (WhereToBuyPage.class);
     }
-    @Step ("Click on Cocktails button in MenuBar")
     public CocktailsPage clickOnCocktailsNavigation(){
         getCocktailsNavigation().click();
-        return new CocktailsPage();
+        return page (CocktailsPage.class);
     }
 
 }
